@@ -259,7 +259,7 @@ class TestConsolidationPriority(SavepointCase):
         move.picking_id.action_assign()
         for line in move.move_line_ids:
             line.qty_done = line.product_uom_qty
-        move.picking_id.action_done()
+        move.picking_id._action_done()
         self.assertEqual(move.state, "done")
 
     def all_chain_moves(self):
@@ -268,7 +268,7 @@ class TestConsolidationPriority(SavepointCase):
     def assert_priority(self, changed_moves, unchanged_moves):
         expected_priority = self.env["stock.move"]._consolidate_priority_value
         changed_ok = all(move.priority == expected_priority for move in changed_moves)
-        unchanged_ok = all(move.priority == "1" for move in unchanged_moves)
+        unchanged_ok = all(move.priority == "0" for move in unchanged_moves)
         self.assertTrue(
             changed_ok and unchanged_ok,
             "Priorities are not correct.\n\nExpected:\n{}\n{}\n\nGot:\n{}".format(
@@ -280,7 +280,7 @@ class TestConsolidationPriority(SavepointCase):
                 ),
                 "\n".join(
                     [
-                        "* {}: {}".format(move.name, "1")
+                        "* {}: {}".format(move.name, "0")
                         for move in unchanged_moves.sorted("id")
                     ]
                 ),

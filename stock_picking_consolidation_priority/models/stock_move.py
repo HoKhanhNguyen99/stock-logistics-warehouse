@@ -7,7 +7,7 @@ from odoo.osv import expression
 class StockMove(models.Model):
     _inherit = "stock.move"
 
-    _consolidate_priority_value = "3"
+    _consolidate_priority_value = "1"
 
     def _action_done(self, cancel_backorder=False):
         moves_to_check = super()._action_done(cancel_backorder=cancel_backorder)
